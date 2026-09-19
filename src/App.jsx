@@ -1,35 +1,35 @@
-import { useForm } from "react-hook-form";
-
 function App() {
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors }
-  } = useForm();
-
-  const onSubmit = (data) => {
-    console.log(data);
-  };
-
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <main className="min-h-screen flex flex-col">
 
-      <input
-        type="text"
-        placeholder="Nombre"
-        {...register("nombre", {
-          required: "El nombre es obligatorio"
-        })}
-      />
+      <header className="p-4 border-b">
+        <h1 className="text-xl font-bold">
+          DevfSeek
+        </h1>
+      </header>
 
-      {errors.nombre && <p>{errors.nombre.message}</p>}
+      <section className="flex-1 p-4">
+        <p>
+          Aquí aparecerán los mensajes.
+        </p>
+      </section>
 
-      <button type="submit">
-        Enviar
-      </button>
+      <form className="p-4 border-t flex gap-2">
+        <input
+          type="text"
+          placeholder="Escribe tu mensaje..."
+          className="flex-1 border rounded-lg p-2"
+        />
 
-    </form>
+        <button
+          type="submit"
+          className="px-4 py-2 rounded-lg"
+        >
+          Enviar
+        </button>
+      </form>
+
+    </main>
   );
 }
 
