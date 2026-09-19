@@ -3,10 +3,12 @@ import { useState } from "react";
 
 function App() {
   const [mensajes, setMensajes] = useState([]);
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { register, handleSubmit, reset, formState: { errors } } = useForm();
+  // reset: reestablecer el valor inicial del formulario
 
   const onSubmit = (data) => {
     setMensajes([...mensajes, data.mensaje]);
+    reset();
   };
 
   return (
