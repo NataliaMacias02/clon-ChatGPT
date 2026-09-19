@@ -23,9 +23,14 @@ function App() {
       {/* Mostrar los mensajes en el chat */}
       <section className="flex-1 p-4">
         {mensajes.map((mensaje, index) => (
-          <p key={index}>
-            {mensaje}
-          </p>
+          <div
+            key={index}
+            className="flex justify-end"
+          >
+            <p className="px-4 py-2 rounded-lg">
+              {mensaje}
+            </p>
+          </div>
         ))}
       </section>
 
@@ -37,7 +42,7 @@ function App() {
             {...register("mensaje", {
               required: "El mensaje no puede estar vacío"
             })}
-            className="w-full border rounded-lg p-2"
+            className="w-full border rounded-lg px-4 py-2"
           />
 
           {errors.mensaje && (
@@ -46,7 +51,7 @@ function App() {
 
           <button
             type="submit"
-            className="px-4 py-2 rounded-lg"
+            className="px-4 py-2 rounded-lg font-medium"
           >
             Enviar
           </button>
