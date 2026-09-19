@@ -1,10 +1,12 @@
 import { useForm } from "react-hook-form";
+import { useState } from "react";
 
 function App() {
+  const [mensajes, setMensajes] = useState([]);
   const { register, handleSubmit, formState: { errors } } = useForm();
 
   const onSubmit = (data) => {
-    console.log(data);
+    setMensajes([...mensajes, data.mensaje]);
   };
 
   return (
@@ -16,10 +18,13 @@ function App() {
         </h1>
       </header>
 
+      {/* Mostrar los mensajes en el chat */}
       <section className="flex-1 p-4">
-        <p>
-          Aquí aparecerán los mensajes.
-        </p>
+        {mensajes.map((mensaje, index) => (
+          <p key={index}>
+            {mensaje}
+          </p>
+        ))}
       </section>
 
       <form onSubmit={handleSubmit(onSubmit)} className="p-4 border-t flex gap-2">
