@@ -1,4 +1,12 @@
+import { useForm } from "react-hook-form";
+
 function App() {
+  const { register, handleSubmit } = useForm();
+
+  const onSubmit = (data) => {
+    console.log(data);
+  };
+
   return (
     <main className="min-h-screen flex flex-col">
 
@@ -14,10 +22,11 @@ function App() {
         </p>
       </section>
 
-      <form className="p-4 border-t flex gap-2">
+      <form onSubmit={handleSubmit(onSubmit)} className="p-4 border-t flex gap-2">
         <input
           type="text"
           placeholder="Escribe tu mensaje..."
+          {...register("mensaje")}
           className="flex-1 border rounded-lg p-2"
         />
 
