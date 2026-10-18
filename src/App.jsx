@@ -1,64 +1,71 @@
 import { useForm } from "react-hook-form";
-import { useState } from "react";
+import { useChat } from "./context/ChatContext";
+import { useOllama } from "./hooks/useOllama";
+import History from "./components/History";
+import Message from "./components/Message";
 
 function App() {
-  const [mensajes, setMensajes] = useState([]);
+  const { state } = useChat();
+  const { sendMessage, stop, isLoading, error } = useOllama();
   const { register, handleSubmit, reset, formState: { errors } } = useForm();
-  // reset: reestablecer el valor inicial del formulario
+
+  const activa = state.conversations.find((c) => c.id === state.activeId);
+  const mensajes = activa?.messages ?? [];
 
   const onSubmit = (data) => {
-    setMensajes([...mensajes, data.mensaje]);
+    sendMessage(data.mensaje);
     reset();
   };
 
   return (
-    <main className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex">
+      <History />
 
-      <header className="p-4 border-b">
-        <h1 className="text-xl font-bold">
-          DevfSeek
-        </h1>
-      </header>
+      <main className="flex-1 flex flex-col">
+        <header className="p-4 border-b">
+          <h1 className="text-xl font-bold">DevfSeek</h1>
+        </header>
 
-      {/* Mostrar los mensajes en el chat */}
-      <section className="flex-1 p-4">
-        {mensajes.map((mensaje, index) => (
-          <div
-            key={index}
-            className="flex justify-end"
-          >
-            <p className="px-4 py-2 rounded-lg">
-              {mensaje}
-            </p>
+        {/* Mostrar los mensajes en el chat */}
+        <section className="flex-1 p-4 overflow-y-auto">
+          {mensajes.map((m, index) => (
+            <Message key={index} role={m.role} content={m.content} />
+          ))}
+          {isLoading && <p className="text-sm text-gray-500">Pensando...</p>}
+          {error && <p className="text-red-500">{error}</p>}
+        </section>
+
+        <form onSubmit={handleSubmit(onSubmit)} className="p-4 border-t flex gap-2">
+          <div className="flex-1">
+            <input
+              type="text"
+              placeholder="Escribe tu mensaje..."
+              {...register("mensaje", {
+                required: "El mensaje no puede estar vacío",
+              })}
+              className="w-full border rounded-lg px-4 py-2"
+            />
+            {errors.mensaje && (
+              <p className="text-red-500 text-sm">{errors.mensaje.message}</p>
+            )}
           </div>
-        ))}
-      </section>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="p-4 border-t flex gap-2">
-        <div className="flex-1">
-          <input
-            type="text"
-            placeholder="Escribe tu mensaje..."
-            {...register("mensaje", {
-              required: "El mensaje no puede estar vacío"
-            })}
-            className="w-full border rounded-lg px-4 py-2"
-          />
-
-          {errors.mensaje && (
-            <p>{errors.mensaje.message}</p>
+          {isLoading ? (
+            <button
+              type="button"
+              onClick={stop}
+              className="px-4 py-2 rounded-lg font-medium border"
+            >
+              Detener
+            </button>
+          ) : (
+            <button type="submit" className="px-4 py-2 rounded-lg font-medium border">
+              Enviar
+            </button>
           )}
-
-          <button
-            type="submit"
-            className="px-4 py-2 rounded-lg font-medium"
-          >
-            Enviar
-          </button>
-        </div>
-      </form>
-
-    </main>
+        </form>
+      </main>
+    </div>
   );
 }
 
