@@ -90,3 +90,9 @@ src/
 
 - **"No se pudo conectar con Ollama":** confirma que Ollama está corriendo y que el modelo `deepseek-r1:1.5b` aparece en `ollama list`.
 - **La respuesta tarda en aparecer:** el modelo corre en tu equipo, así que el primer mensaje puede tardar más mientras se carga en memoria.
+
+## Manejo de estado con useContext
+
+- **`createContext`:** `ChatContext` en `src/context/ChatContext.jsx`.
+- **Provider:** `ChatProvider` envuelve la app en `main.jsx` y expone `state` y `dispatch`.
+- **`useContext`:** el hook `useChat` lo consumen `History`, `MessageList` y `useOllama`, sin pasar props entre componentes (se evita el *prop drilling*).
